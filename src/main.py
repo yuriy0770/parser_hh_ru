@@ -1,12 +1,10 @@
 import os
-from typing import NoReturn
-
 from parser import HeadHunterAPI
 from save import JSONFileHandler
 from vacancies import Vacancy
 
 
-def main() -> NoReturn:
+def main():
     hh_api = HeadHunterAPI()
     program_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
     absolute_json_file_path = os.path.join(program_dir, "vacancies.json")
@@ -35,11 +33,10 @@ def main() -> NoReturn:
 
 
 
-
+if __name__ == "__main__":
+    main()
 
 
    
 
 
-if __name__ == "__main__":
-    main()

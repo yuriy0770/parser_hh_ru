@@ -1,22 +1,19 @@
 import json
 import os
 from abc import ABC, abstractmethod
-from pathlib import Path
 from typing import Dict, List
 
 
 class AbstractWorkWithVacancy(ABC):
     """Абстрактный класс, содержащий методы, добавляющие вакансии в файл, получающие данные из файла по
-     указанным критериям и удаляющие информацию о вакансии"""
+     указанным критериям"""
 
     @abstractmethod
     def _load_data(self, vacancies: list[dict]) -> list[dict]:
-        """Абстрактный метод, получающий заданную информацию из вакансии"""
         pass
 
     @abstractmethod
     def write_data(self, requirements: dict):
-        """Абстрактный метод предполагающий добавление новых вакансий в JSON файл"""
         pass
 
 

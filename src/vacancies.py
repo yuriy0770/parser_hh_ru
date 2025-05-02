@@ -18,8 +18,8 @@ class Vacancy:
     def __validate(self, ):
         if not isinstance(self.name, str) or not self.name.strip():
             raise ValueError("Название должно быть строкой и не пустым")
-        if not isinstance(self.url, str):
-            raise ValueError("URL должен быть строкой")
+        if not isinstance(self.url, str) and self.url != "":
+            raise ValueError("URL должен быть строкой и не пустой строчкой")
         parsed_url = urlparse(self.url)
         if not (parsed_url.scheme in ['http', 'https'] and parsed_url.netloc):
             raise ValueError("Допустимые URL: http(s)://<domain>")
