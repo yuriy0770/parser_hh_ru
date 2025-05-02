@@ -8,7 +8,7 @@
 
 Клонируйте репозиторий:
 
-git clone https://github.com/yuriy0770/VitjetsBank.git
+git clone https://github.com/yuriy0770/parser_hh_ru.git
 
 ## Установите зависимости: ##
 
