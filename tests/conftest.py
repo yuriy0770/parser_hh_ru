@@ -1,8 +1,7 @@
 import os
-from sys import platform
+from unittest.mock import MagicMock, patch
 
 import pytest
-
 from src.parser import HeadHunterAPI
 from src.save import JSONFileHandler
 from src.vacancies import Vacancy
@@ -57,5 +56,4 @@ def platform_data():
             "requirements": {"name": "Описание не указано"},
         },
     ]
-
 

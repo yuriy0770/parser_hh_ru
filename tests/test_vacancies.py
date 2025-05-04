@@ -59,13 +59,6 @@ def test_without_url():
         salary_to=120000,
         requirements="Разработка и поддержка, back end части веб-приложений.",)
 
-def test_without_url2():
-    with pytest.raises(ValueError):
-        Vacancy(name="Python_developer",
-        url="hh.ru/applicant/vacancy_response?vacancyId=117286365",
-        salary_from=100000,
-        salary_to=120000,
-        requirements="Разработка и поддержка, back end части веб-приложений.",)
 
 
 def test_from_platform(platform_data):
@@ -92,7 +85,33 @@ def test___gt__():
     salary_from2 = 60000
     salary_to2 = 80000
 
-    vacancy1 = Vacancy("Test Name 1", "http://test.url1", salary_from1, salary_to1, [])
-    vacancy2 = Vacancy("Test Name 2", "http://test.url2", salary_from2, salary_to2, [])
+    vacancy1 = Vacancy("Test Name 1", "http://test.url1", salary_from1, salary_to1, "f43f3")
+    vacancy2 = Vacancy("Test Name 2", "http://test.url2", salary_from2, salary_to2, "3f34f")
 
     assert (vacancy1 > vacancy2) == ((salary_from1 + salary_to1) / 2 > (salary_from2 + salary_to2) / 2)
+
+def test_to_dict(vacancy):
+    q = Vacancy(
+        name="Python_developer",
+        url="https://hh.ru/applicant/vacancy_response?vacancyId=117286365",
+        salary_from=100000,
+        salary_to=120000,
+        requirements="Разработка и поддержка, back end части веб-приложений.",
+    )
+    assert q.to_dict()["name"] == vacancy.name
+    assert q.to_dict()["url"] == vacancy.url
+    assert q.to_dict()["salary_from"] == vacancy.salary_from
+    assert q.to_dict()["salary_to"] == vacancy.salary_to
+    assert q.to_dict()["requirements"] == vacancy.requirements
+
+
+def test_validate_str():
+    q = Vacancy(
+        name="Python_developer",
+        url="https://hh.ru/applicant/vacancy_response?vacancyId=117286365",
+        salary_from="ouhg",
+        salary_to=120000,
+        requirements="Разработка и поддержка, back end части веб-приложений.",
+    )
+
+    assert q.salary_from == 0

@@ -1,7 +1,8 @@
-from unittest.mock import patch
 
-from src.parser import HeadHunterAPI, Base
-
+from src.parser import Base
+import pytest
+from unittest.mock import MagicMock, patch
+from src.parser import HeadHunterAPI
 
 def test1(api_len):
     api = api_len
@@ -35,5 +36,38 @@ def test_get_vacancies_success():
 def test_hh_api_init():
     q = HeadHunterAPI()
     assert q._HeadHunterAPI__base_url == "https://api.hh.ru/vacancies"
+
+
+def test_get_data():
+    HeadHunterAPI.get_data == "https://api.hh.ru/vacancies"
+
+
+
+
+class TestHeadHunterAPI:
+
+    def setup_method(self):
+        self.api = HeadHunterAPI()
+
+    @pytest.fixture
+    def mock_response(self, monkeypatch):
+        response = MagicMock()
+        response.status_code = 200
+        response.json.return_value = {"items": []}
+
+        with patch("requests.get", return_value=response):
+            yield response
+
+    def test__get_data_success(self, mock_response):
+        self.api._get_data()
+        assert self.api.session is not None
+
+
+
+    def test_get_vacancies_success(self, mock_response):
+        with patch("requests.get", return_value=mock_response):
+            vacancies = self.api.get_vacancies("test_word")
+            assert isinstance(vacancies, list)
+            assert len(vacancies) == 0
 
 
