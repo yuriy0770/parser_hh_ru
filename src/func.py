@@ -1,8 +1,15 @@
+from typing import List
+
+from src.vacancies import Vacancy
 
 
+def get_sorted_vacancies(vacancies):
+    """Возвращает вакансии отсортированные по убыванию от средней зарплаты"""
+    return sorted(vacancies, reverse=True)
 
-def func(list_d):
-    return sorted(list_d,
-                key=lambda x: (
-                x.salary_from if x.salary_from is not None else 0 + x.salary_to if x.salary_to is not None else 0) / 2,
-                reverse=True)
+
+def filter_vacancies(vacancies_list: List[Vacancy], word):
+    """Печатает все вакансии по найденному слову"""
+    for i in vacancies_list:
+        if word in i.name or word in i.requirements:
+            print(i.__str__())

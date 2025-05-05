@@ -68,12 +68,12 @@ def test_from_platform(platform_data):
     for i in vacancies:
         assert isinstance(i, Vacancy)
 
-    assert vacancies[0].name == "Программист"
+    assert vacancies[0].name == "программист"
     assert vacancies[0].url == "https://example.com/job1"
     assert vacancies[0].salary_from == 80000
     assert vacancies[0].salary_to == 150000
     assert vacancies[0].requirements == "Описание не указано"
-    assert vacancies[1].name == "Тестировщик"
+    assert vacancies[1].name == "тестировщик"
     assert vacancies[1].url == "https://example.com/job2"
     assert vacancies[1].salary_from == 60000
     assert vacancies[1].salary_to == 100000

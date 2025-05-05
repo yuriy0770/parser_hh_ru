@@ -11,15 +11,14 @@ class Base(ABC):
 
     @abstractmethod
     def get_vacancies(self, word):
-         pass
-
+        pass
 
 
 class HeadHunterAPI(Base):
     """Класс для парсинга данных с hh.ru"""
 
     def __init__(self):
-        self.__base_url = 'https://api.hh.ru/vacancies'
+        self.__base_url = "https://api.hh.ru/vacancies"
         self.session = None
 
     @property
@@ -37,7 +36,7 @@ class HeadHunterAPI(Base):
         """Получаем вакансии по заданному слову"""
         self._get_data()
         if self.session:
-            params = {'text': word.lower(), "per_page": 100}
+            params = {"text": word.lower(), "per_page": 100}
             response = requests.get(self.__base_url, params=params)
             if response.status_code == 200:
                 try:
@@ -49,7 +48,3 @@ class HeadHunterAPI(Base):
         else:
             print("Подключение не удалось.")
         return []
-
-
-
-

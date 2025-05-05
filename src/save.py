@@ -3,10 +3,9 @@ import os
 from abc import ABC, abstractmethod
 
 
-
 class AbstractWorkWithVacancy(ABC):
     """Абстрактный класс, содержащий методы, добавляющие вакансии в файл, получающие данные из файла по
-     указанным критериям и удаляющие информацию о вакансии"""
+    указанным критериям и удаляющие информацию о вакансии"""
 
     @abstractmethod
     def _load_data(self) -> None:
@@ -19,10 +18,10 @@ class AbstractWorkWithVacancy(ABC):
         pass
 
 
-
 class JSONFileHandler(AbstractWorkWithVacancy):
     program_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
     absolute_json_file_path = os.path.join(program_dir, "vacancies.json")
+
     def __init__(self, absolute_json_file_path):
         self.__path = absolute_json_file_path
         self.all_data = []
@@ -36,8 +35,8 @@ class JSONFileHandler(AbstractWorkWithVacancy):
         except FileNotFoundError:
             self.all_data = []
         except Exception as e:
-            print(f"Ошибка при чтении файла: {e}")  # Обработка всех ошибок
-            self.all_data = []  # Возвращаем пустой список
+            print(f"Ошибка при чтении файла: {e}")
+            self.all_data = []
 
     def write_to_file(self, data):
         """Метод записи данных"""
@@ -47,9 +46,8 @@ class JSONFileHandler(AbstractWorkWithVacancy):
     def add_vacancies(self, data_: list[dict]) -> list:
         """Метод добавления данных в JSON-файл."""
         try:
-            self._load_data()
-            values_data = [values_d['id'] for values_d in self.all_data]
-            d_data = [data for data in data_ if data['id'] not in values_data]
+            values_data = [values_d["name"] for values_d in self.all_data]
+            d_data = [data for data in data_ if data["name"] not in values_data]
             self.all_data.extend(d_data)
             self.write_to_file(self.all_data)
             return self.all_data
@@ -57,5 +55,7 @@ class JSONFileHandler(AbstractWorkWithVacancy):
             print(f"Ошибка при сохранении данных в файл: {e}")
         return []
 
-
-
+    def del_vacancy(self):
+        """Удаляет все вакансии"""
+        with open(self.__path, "w", encoding="utf-8") as f:
+            f.write(json.dumps([], ensure_ascii=False, indent=4))
