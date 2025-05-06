@@ -1,8 +1,9 @@
 import os
 from typing import NoReturn
 
-from parser import HeadHunterAPI
+from src.parser import HeadHunterAPI
 from save import JSONFileHandler
+from src.func import get_sorted_vacancies, filter_vacancies
 from vacancies import Vacancy
 
 
@@ -12,33 +13,46 @@ def main() -> NoReturn:
     absolute_json_file_path = os.path.join(program_dir, "vacancies.json")
     storage = JSONFileHandler(absolute_json_file_path)
 
-    if not hh_api._Base__get_data():
-        print("Не удалось подлкючиться к API сайта hh.ru")
-
-
     query = input("Введите поисковой запрос: ")
     vacancies = hh_api.get_vacancies(query)
-    storage.write_data(vacancies) if storage else None
-    print(f'Добавили {len(vacancies)} вакансий')
+    list_vacancies = [vacancy_.to_dict() for vacancy_ in Vacancy.cast_to_object_list(vacancies)]
+    actual_data = storage.add_vacancies(list_vacancies)
+    vacancies_list = Vacancy.cast_to_object_list_2(actual_data)
+    print(f"Добавили {len(vacancies_list)} уникальных вакансий")
 
-
+    answer1 = input("Хотите получить вакансии по определенному слову да/нет ")
+    if answer1 == "да":
+        word = input("Введите слово: ")
+        filter_vacancies(vacancies_list, word)
+    else:
+        print("Как хотите")
 
     top_n = int(input("Введите количество вакансий для вывода в топ N: "))
-    data = storage._load_data() if storage else None
-    vacancies_list = Vacancy.cast_to_object_list(data)
 
-    sorted_vacancies = sorted(vacancies_list,
-        key=lambda x: (x.salary_from if x.salary_from is not None else 0 + x.salary_to if x.salary_to is not None else 0) / 2,
-        reverse=True)
-    for i in sorted_vacancies[:top_n]:
-        print(i.__str__())
+    sorted_vacancies = get_sorted_vacancies(vacancies_list)
+    for i, j in enumerate(sorted_vacancies[:top_n], start=1):
+        print(i, j.__str__())
 
-
-
-
-
-
-   
+    answer = input("Хотите удалить какие-то вакансии по номеру да/нет ")
+    if answer == "да":
+        answer1 = input("Введите номера вакансий которые хотите удалить через пробел(например '1 7')")
+        num1, num2 = map(int, answer1.split())
+        for i, j in enumerate(sorted_vacancies, start=1):
+            if i in range(num1, num2 + 1):
+                del sorted_vacancies[i - 1]
+            else:
+                continue
+        print("Список всех вакансий без удаленных")
+        for i, j in enumerate(sorted_vacancies, start=1):
+            print(f"{i} {j.__str__()}")
+    else:
+        print("Как хотите")
+    delete_all = input("Может вы хотите удалить все вакансии (да/нет) ").lower()
+    if delete_all == "да":
+        storage.del_vacancy()
+        print("Все вскансии удалены")
+    else:
+        print("Вакансии остались на месте")
 
 
 if __name__ == "__main__":
